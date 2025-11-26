@@ -1,23 +1,25 @@
 import { useEffect, useState } from "react";
 
-function useCurrencyInfo(currency) {
+function useCurrencyInfo(currency, toCurr) {
 
-    const [data, setData] = useState(null);
+    const [rate, setRate] = useState(null);
 
     useEffect(() => {
         const fetchCurrency = async () => {
             const url = `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${currency}.json`;
             const response = await fetch(url);
             const result = await response.json();
-            setData(result);
-            
-            console.log(result);
-        }
+
+            // Extract the exchange rate properly
+            setRate(result[currency][toCurr]);
+
+            console.log(rate);
+        };
 
         fetchCurrency();
-    }, [currency]);
-    
-    return data;
+    }, [currency, toCurr]);
+
+    return rate; // the actual conversion rate
 }
 
 export default useCurrencyInfo;
